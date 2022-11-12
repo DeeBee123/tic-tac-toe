@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-tac-toe</title>
+    <script src="./script.js" defer></script>
+    <style>
+      :root {
+        --white100: #f0f0f0;
+        --turquoise100: #619da0;
+        --torquoise800: #0c6164;
+        --yellow700: #dcb78a;
+        --column-width: 100px;
+      }
+      body {
+        margin: 0;
+        background-color: var(--turquoise100);
+        color: var(--white100);
+        text-align: center;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 2em;
+      }
+      .title {
+        width: 50%;
+        margin: 0 auto 15px;
+        padding: 7px 0;
+        border-bottom: 3px dotted var(--yellow700);
+      }
+      .score {
+        margin-top: 5px;
+        position: relative;
+        display: inline;
+        letter-spacing: 5px;
+      }
+
+      /* .score::before {
+        content: ".";
+        color: #fec22c;
+        position: absolute;
+        top: -0.6em;
+        left: -0.3em;
+      }
+      .score::after {
+        content: ".";
+        color: #fec22c;
+        position: absolute;
+        top: -0.6em;
+        right: -0.3em;
+      } */
+      .score span{
+        color: #fec22c;
+        position: absolute;
+        top: -0.6em;
+        left: -0.3em;
+      }
+     
+      .score.player2 span{
+        top: -0.6em;
+        right: -0.3em;
+        left: unset;
+      }
+
+
+      .board {
+        margin: 10px auto 0;
+        width: calc(var(--column-width) * 3);
+        display: grid;
+        grid-template-columns: repeat(3, var(--column-width));
+        grid-template-rows: repeat(3, var(--column-width));
+        font-size: var(--column-width);
+      }
+      .board span {
+        border: 3px solid var(--yellow700);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* every third */
+      .board span:nth-child(3n + 3) {
+        border-right: none;
+      }
+      /* first three */
+      .board span:nth-child(-n + 3) {
+        border-top: none;
+      }
+      /* every third starting from one */
+      .board span:nth-child(3n + 1) {
+        border-left: none;
+      }
+      /* all starting from seven */
+      .board span:nth-child(n + 7) {
+        border-bottom: none;
+      }
+      .board span.player1::after {
+        content: "X";
+      }
+      .board span.player2::after {
+        content: "O";
+        color: var(--torquoise800);
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">TIC TAC TOE</h1>
+    <h2 class="score">0:0</h2>
+    <!-- <div class="board">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="player1"></span>
+      <span></span>
+      <span></span>
+      <span class="player2"></span>
+    </div> -->
+  </body>
+</html>
