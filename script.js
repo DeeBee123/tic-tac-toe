@@ -1,3 +1,5 @@
+//import and extend GameUI
+
 class Game {
   static boardUI;
   static scoreUI;
@@ -7,6 +9,7 @@ class Game {
   static player1 = [];
   static player2 = [];
   static notEnd = true;
+  static index = 0;
 
   static startGame() {
     this.#drawBoard();
@@ -53,18 +56,31 @@ class Game {
       this.scoreUI.classList.remove("score");
     }
   }
-  static #clickMethod(element, i) {
-    this.#checked(element, i);
-  }
 
   static #addKeyControl() {
-    // window.addEventListener('keyDown', )
-    //
+    const allowedKeys = [
+      "w",
+      "s",
+      "d",
+      "a",
+      "ArrowUp",
+      "ArrowLeft",
+      "ArrowDown",
+      "ArrowRight",
+      " ",
+    ];
+    window.addEventListener(
+      "keydown",
+      (e) => allowedKeys.includes(e.key) && this.#keyDown(e.key)
+    );
+
     this.boardUI.querySelectorAll("span").forEach((element, i) => {
+      console.log(element);
+      element.classList.remove("notChecked");
       element.addEventListener("click", function markOnce() {
         console.log(Game.notEnd);
         if (Game.notEnd) {
-          Game.#clickMethod(element, i);
+          Game.#checked(element, i);
         }
         Game.#removeControl(markOnce);
       });
@@ -77,12 +93,92 @@ class Game {
     });
   }
 
+  static #keyDown(key, element, i) {
+    const allsquares = document.querySelectorAll(".board span");
+    const emptysquares = document.querySelectorAll(".board span:not(.checked)");
+    console.log(emptysquares);
+    let prevIndex = this.index;
+
+    switch (key) {
+      case "ArrowLeft":
+      case "a":
+        if (this.index === 0) {
+          this.index = emptysquares.length - 1;
+          prevIndex = 0;
+        } else this.index--;
+        emptysquares[this.index].classList.add("notChecked");
+        emptysquares[this.index].classList.add(`player${this.turn}`);
+        emptysquares[prevIndex].classList.remove(`notChecked`);
+        emptysquares[prevIndex].classList.remove(`player1`);
+        emptysquares[prevIndex].classList.remove(`player2`);
+        break;
+      case "ArrowRight":
+      case "d":
+        if (allsquares.length - 1 <= this.index) {
+          this.index = 0;
+          prevIndex = allsquares.length - 1;
+        } else this.index++;
+        emptysquares[this.index].classList.add("notChecked");
+        emptysquares[this.index].classList.add(`player${this.turn}`);
+        emptysquares[prevIndex].classList.remove(`notChecked`);
+        emptysquares[prevIndex].classList.remove(`player1`);
+        emptysquares[prevIndex].classList.remove(`player2`);
+        break;
+      case "ArrowUp":
+      case "w":
+        console.log(this.index)
+        if (this.index <= 2) {
+          prevIndex = this.index;
+          this.index += 6;
+          console.log(this.index)
+        } else {this.index -= 3;}
+
+        console.log([...emptysquares].indexOf(allsquares[this.index]))
+        if ([...emptysquares].indexOf(allsquares[this.index]) || [...emptysquares].indexOf(allsquares[this.index]) ===0) {
+          allsquares[this.index].classList.add("notChecked");
+          allsquares[this.index].classList.add(`player${this.turn}`);
+        }
+        if ([...emptysquares].indexOf(allsquares[prevIndex])|| [...emptysquares].indexOf(allsquares[prevIndex]) ===0) {
+          console.log(emptysquares)
+          allsquares[prevIndex].classList.remove(`notChecked`);
+          allsquares[prevIndex].classList.remove(`player1`);
+          allsquares[prevIndex].classList.remove(`player2`);
+        }
+
+        break;
+      case "ArrowDown":
+      case "s":
+        if (this.index >= 6) {
+          prevIndex = this.index;
+          this.index -= 6;
+        } else this.index += 3;
+        allsquares[this.index].classList.add("notChecked");
+        allsquares[this.index].classList.add(`player${this.turn}`);
+        allsquares[prevIndex].classList.remove(`notChecked`);
+        allsquares[prevIndex].classList.remove(`player1`);
+        allsquares[prevIndex].classList.remove(`player2`);
+        break;
+
+      case " ":
+        emptysquares[this.index].classList.remove("notChecked");
+        let i = [...allsquares].indexOf(emptysquares[this.index]);
+        Game.#checked(emptysquares[this.index], i);
+        this.index = 0;
+        console.log("checked");
+        break;
+      default:
+        console.log("unpredictable action");
+    }
+  }
+
   static #checked(element, i) {
+    console.log(element);
     //onClick or spaceBar
     //check if have not yet pressed
 
     if (this.turn === 1) {
       element.classList.add("player1");
+      element.classList.add("checked");
       this.player1.push(i);
       if (this.player1.length > 2) {
         this.#checkIfWon(this.player1);
@@ -91,6 +187,7 @@ class Game {
       this.#dynamicUI();
     } else if (this.turn === 2) {
       element.classList.add("player2");
+      element.classList.add("checked");
       this.player2.push(i);
       if (this.player2.length > 2) {
         this.#checkIfWon(this.player2);

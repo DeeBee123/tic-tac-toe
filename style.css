@@ -77,3 +77,11 @@
     content: "O";
     color: var(--torquoise800);
   }
+
+  .board span.player2.notChecked::after {
+   opacity: 0.2;
+  }
+  .board span.player1.notChecked::after {
+    opacity: 0.2;
+   }
+ 
